@@ -1,4 +1,4 @@
-t import os, shutil
+import os, shutil
 
 
 srcip1 = ' - 10.0.0.1'
@@ -7,7 +7,9 @@ srcip3 = ' - 10.0.0.3'
 srcip4 = ' - 10.0.0.4'
 srcip5 = ' - 10.0.0.5'
 srcip6 = ' - 10.0.0.6'
-
+pjinfo = 'INFORMATION'
+pjfw = 'FIREWALL'
+pjdescr = 'DESCRIPTION'
 
 def fwip(srcip, Sts):
     srcipst = ' ... '
@@ -16,21 +18,21 @@ def fwip(srcip, Sts):
 
 def newreadme(pjpath, pjname, pjtype, pjaddress, pjsitetype, pjdescription):
     f = open(pjpath+'README.txt', 'w', encoding="utf8")
-    f.write(pjname+'\n\n\nINFORMATION\n - Name: '+pjname+' ('+pjtype+')\n - Address: '+pjaddress+' ('+pjsitetype+' Server)\n\n\n')
-    f.write('FIREWALL\n'+fwip(srcip1, 'Nothing')+fwip(srcip2, 'Nothing')+fwip(srcip3, 'Nothing')+fwip(srcip4, 'Nothing')+fwip(srcip5, 'Nothing')+fwip(srcip6, 'Nothing')+'\n\n')
-    f.write('DESCRIPTION\n'+pjdescription)
+    f.write(pjname+'\n\n\n'+pjinfo+'\n - Name: '+pjname+' ('+pjtype+')\n - Address: '+pjaddress+' ('+pjsitetype+' Server)\n\n\n')
+    f.write(pjfw+'\n'+fwip(srcip1, 'Nothing')+fwip(srcip2, 'Nothing')+fwip(srcip3, 'Nothing')+fwip(srcip4, 'Nothing')+fwip(srcip5, 'Nothing')+fwip(srcip6, 'Nothing')+'\n\n')
+    f.write(pjdescr+'\n'+pjdescription)
     f.close()
 
 
 def fwstatus(pjpath, status):
     with open(pjpath+'README.txt', 'r', encoding="utf8") as f:
         lines = f.readlines()
-        fwline = [i for i in range(len(lines)) if 'FIREWALL' in lines[i]][0]
+        fwline = [i for i in range(len(lines)) if pjfw in lines[i]][0]
     with open(pjpath+'README.txt', 'w', encoding="utf8") as f:
         for line, line_i in enumerate(lines):
             if line_i is lines[fwline]:
-                # f.write('FIREWALL\n'+status+'\n')
-                f.write('FIREWALL\n')
+                # f.write(pjfw+'\n'+status+'\n')
+                f.write(pjfw+'\n')
             elif line_i is lines[fwline+1]:
                 f.write(fwip(srcip1, status))
             elif line_i is lines[fwline+2]:
@@ -50,11 +52,11 @@ def fwstatus(pjpath, status):
 def descr(pjpath, desc):
     with open(pjpath+'README.txt', 'r', encoding="utf8") as f:
         lines = f.readlines()
-        fwline = [i for i in range(len(lines)) if 'DESCRIPTION' in lines[i]][0]
+        fwline = [i for i in range(len(lines)) if pjdescr in lines[i]][0]
     with open(pjpath+'README.txt', 'w', encoding="utf8") as f:
         for line, line_i in enumerate(lines):
             if line_i is lines[fwline]:
-                f.write('DESCRIPTION\n')
+                f.write(pjdescr+'\n')
             elif line_i is lines[fwline+1]:
                 f.write(desc)
             else:
